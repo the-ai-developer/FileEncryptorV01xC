@@ -40,6 +40,7 @@ int8 *readkey(char *prmpt){
     printf("%s ",prmpt);
     fflush(stdout);
 
+    toggleEcho(false);
     memset(DataX,0,256);
     read(0, DataX, 255);
 
@@ -51,10 +52,25 @@ int8 *readkey(char *prmpt){
     ptr = (int8 *)malloc(SizeX);
     assert(ptr);
     strncpy((char *)ptr,DataX, Idx);
+    toggleEcho(true);
+
     return ptr;
 }
 
+void toggleEcho(bool IsEnabled){
+    struct termios *t;
 
+    t = (struct termios *)malloc(sizeof(struct termios));
+
+    tcgetattr(0, t);
+    if(IsEnabled){
+        t->c_cflag |= ECHO;
+    }else{
+        t->c_cflag &= ECHO;
+    }
+    tcsetattr(0,0,t);
+    return ;
+}
 
 int main(int argc, char *argv[]){
     Arcfour *rc4;
