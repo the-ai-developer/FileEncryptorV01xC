@@ -62,13 +62,13 @@ void toggleEcho(bool IsEnabled){
 
     t = (struct termios *)malloc(sizeof(struct termios));
 
-    tcgetattr(0, t);
+    tcgetattr(1, t);
     if(IsEnabled){
         t->c_cflag |= ECHO;
     }else{
         t->c_cflag &= ECHO;
     }
-    tcsetattr(0,0,t);
+    tcsetattr(1,0,t);
     return ;
 }
 
